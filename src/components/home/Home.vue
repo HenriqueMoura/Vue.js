@@ -8,8 +8,9 @@
       <li class="lista-fotos-item" v-for="foto of fotosComFiltro" v-bind:key="foto.id">
 
         <meu-painel :titulo="foto.titulo">
-          <imagem-responsiva :url='foto.url' :titulo='foto.titulo'></imagem-responsiva>
-          <meu-botao tipo="button" rotulo="REMOVER" @click.native='remove(foto)'/>
+          <imagem-responsiva :url='foto.url' :titulo='foto.titulo'/>
+          <meu-botao tipo="button" rotulo="REMOVER" @botaoAtivado ='remove(foto)'
+          :confirmacao="true"/>
         </meu-painel>
 
         </li>
@@ -23,6 +24,7 @@
 import Painel from '../shared/painel/Painel.vue';
 import imagemResponsiva from '../shared/imagem-responsiva/imagemResponsiva.vue';
 import Botao from '../shared/botoes/Botao.vue'
+
 export default {
   components:{
     'meu-painel' : Painel,
@@ -43,10 +45,9 @@ export default {
   },
   methods:{
 
-    remove(foto){
-      if (confirm('confirma Operação')){
-        alert('Removido '+  foto.titulo)
-      }
+    remove($event, foto){
+        // alert($event)
+        alert('Removido ' )
     }
   },
 
