@@ -4,7 +4,7 @@
   <div >
     <h1 class="centralizado"> {{ titulo }} </h1>
     
-       <p class="centralizado">{{ menssagem }}</p>
+       <p v-show="menssagem" class="centralizado">{{ menssagem }}</p>
     <input type="search" class="filtro" v-on:input="filtro = $event.target.value" placeholder="filtro">
     <ul class="lista-fotos">
       <li class="lista-fotos-item" v-for="foto of fotosComFiltro" v-bind:key="foto.id">
@@ -57,11 +57,10 @@ export default {
         .then(() => {
             let indice = this.fotos.indexOf(foto);
             this.fotos.splice(indice, 1);
-            this.mensagem = 'Foto removida com sucesso'
+            this.menssagem = 'Foto removida com sucesso'
           }, 
           err => {
-            this.mensagem = 'Não foi possível remover a foto';
-            console.log(err);
+            this.menssagem = err.message
           }
         )
     }
@@ -76,18 +75,21 @@ export default {
      menssagem: '',
    }
  },
- created(){
-   this.service = new FotoService(this.$resource)
-    this.service
-    .lista()
-    .then(fotos => this.fotos = fotos, err => console.log(err));
+ created() {
 
+    this.service = new FotoService(this.$resource);
+
+    this.service.lista()
+      .then(fotos => this.fotos = fotos, err => {
+          this.menssagem = err.message
+      })
+  }
+}
     /*promise.then(res =>{
         res.json().then(fotos =>
         this.fotos = fotos)
     })*/
-  }
-}
+
 </script>
 
 <style>
