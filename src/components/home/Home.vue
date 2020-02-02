@@ -4,7 +4,7 @@
   <div >
     <h1 class="centralizado"> {{ titulo }} </h1>
     
-       <p v-show="menssagem" class="centralizado">{{ menssagem }}</p>
+       <p class="centralizado">{{ menssagem }}</p>
     <input type="search" class="filtro" v-on:input="filtro = $event.target.value" placeholder="filtro">
     <ul class="lista-fotos">
       <li class="lista-fotos-item" v-for="foto of fotosComFiltro" v-bind:key="foto.id">
@@ -27,7 +27,7 @@
 import Painel from '../shared/painel/Painel.vue';
 import imagemResponsiva from '../shared/imagem-responsiva/imagemResponsiva.vue';
 import Botao from '../shared/botoes/Botao.vue'
-
+import FotoService from  '../../domain/foto/fotoService.js'
 export default {
   components:{
     'meu-painel' : Painel,
@@ -46,16 +46,22 @@ export default {
       }
     }
   },
-  methods:{
+ methods: {
 
-    remove(foto){
-       this.$http
-          .delete(`http://localhost:3000/v1/fotos/${foto._id}`)
-          .then(()=> this.menssagem = 'Foto removida', err=>{
-          console.log(err)
-          this.menssagem = 'Não foi possivel remover '
-      });
+    remove(foto) {
+       this.service.apaga(foto._id)
+        .then(() => {
+            let indice = this.fotos.indexOf(foto);
+            this.fotos.splice(indice, 1);
+            this.mensagem = 'Foto removida com sucesso'
+          }, 
+          err => {
+            this.mensagem = 'Não foi possível remover a foto';
+            console.log(err);
+          }
+        )
     }
+
   },
 
  data() {
@@ -67,9 +73,10 @@ export default {
    }
  },
  created(){
-    let promise =  this.$http.get('http://localhost:3000/v1/fotos')
-      .then(res => res.json())
-        .then(fotos => this.fotos = fotos, err => console.log(err));
+   this.service = new FotoService(this.$resource)
+    this.service
+    .lista()
+    .then(fotos => this.fotos = fotos, err => console.log(err));
 
     /*promise.then(res =>{
         res.json().then(fotos =>
