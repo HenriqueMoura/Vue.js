@@ -14,4 +14,9 @@ export default class fotoService{
     apaga(id){
        return this._resource.delete({ id })
     }
+    busca(id){
+        return this._resource
+            .get({id})
+            .then(res=> res.json())
+    }
 }
