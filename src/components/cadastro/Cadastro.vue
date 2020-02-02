@@ -47,7 +47,6 @@ export default {
 
   data() {
     return {
-
       foto: new Foto()
     }
   },
@@ -56,14 +55,9 @@ export default {
 
     grava() {
 
-      console.log(this.foto.titulo);
-      console.log(this.foto.url);
-      console.log(this.foto.descricao);
-        this.foto = {
-          titulo: '',
-          url: '',
-          descricao: ''
-      };
+        this.$http
+            .post('http://localhost:3000/v1/fotos',this.foto)
+            .then(()=> this.foto = new Foto(), err => console.log(err))
     }
   }
 }
