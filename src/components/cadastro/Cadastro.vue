@@ -4,7 +4,7 @@
     <h1 class="centralizado">Cadastro</h1>
     <h2 class="centralizado">{{ foto.titulo }}</h2>
 
-    <h2 v-if="foto._id"class="centralizado">alterando</h2>
+    <h2 v-if="foto._id" class="centralizado">alterando</h2>
     <h2 v-else class="centralizado">Incluindo</h2>
 
 
@@ -12,13 +12,15 @@
     <form @submit.prevent="grava()">
       <div class="controle">
         <label for="titulo">TÍTULO</label>
-        <input v-model.lazy="foto.titulo" id="titulo" autocomplete="off">
+        <input data-vv-as="título" name="titulo" v-validate data-vv-rules="required|min:3|max:30"  id="titulo" autocomplete="off">
+        <span class="erro" v-show="errors.has('titulo')">{{errors.first('titulo')}}</span>
       </div>
 
       <div class="controle">
-        <label for="url">URL</label>
-        <input v-model.lazy="foto.url" id="url" autocomplete="off">
-        <imagem-responsiva v-show="foto.url":url="foto.url" :titulo="foto.titulo"/>
+        <label  for="url">URL</label>
+        <input name="url" v-validate data-vv-rules="required"  id="url" autocomplete="off">
+        <imagem-responsiva v-show="foto.url" :url="foto.url" :titulo="foto.titulo"/>
+        <span class="erro"  v-show="errors.has('url')">{{errors.first('url')}}</span>
       </div>
 
       <div class="controle">
@@ -60,12 +62,19 @@ export default {
   methods: {
 
     grava() {
-        this.service
-          .cadastro(this.foto)
-            .then(()=> {
-              if(this.id)this.$router.push({ name: 'home' })
-              this.foto = new Foto()
-            }, err => console.log(err))
+       this.$validator
+          .validateAll()
+          .then(success => {
+            if(success) {
+          this.service
+            .cadastro(this.foto)
+              .then(()=> {
+                if(this.id)this.$router.push({ name: 'home' })
+                this.foto = new Foto()
+              }, err => console.log(err))
+         }
+       })
+        
     }
   },
     created() {
@@ -103,6 +112,9 @@ export default {
 
   .centralizado {
     text-align: center;
+  }
+  .erro{
+    color: red
   }
 
 </style>
