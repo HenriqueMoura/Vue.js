@@ -20,7 +20,6 @@ export default {
     
     methods :{
         disparaAcao(){
-            console.log(this.confirmacao)
         if(this.confirmacao){
             if (confirm('confirma Operação')){
                 this.$emit('botaoAtivado', new Date());

@@ -1,12 +1,102 @@
 <template>
-    <h2 class="centralizado">Cadastro</h2>    
+
+  <div>
+    <h1 class="centralizado">Cadastro</h1>
+    <h2 class="centralizado"></h2>
+
+    <!-- associando o evento com método do componente -->
+
+    <form @submit.prevent="grava()">
+
+      <div class="controle">
+        <label for="titulo">TÍTULO</label>
+        <input @input="foto.titulo = $event.target.value" :value="foto.titulo" id="titulo" autocomplete="off">
+      </div>
+
+      <div class="controle">
+        <label for="url">URL</label>
+        <input @input="foto.url = $event.target.value" :value="foto.url" id="url" autocomplete="off">
+        <imagem-responsiva/>
+      </div>
+
+      <div class="controle">
+        <label for="descricao">DESCRIÇÃO</label>
+        <textarea id="descricao" autocomplete="off" @input="foto.descricao = $event.target.value":value="foto.descricao"></textarea>
+      </div>
+
+      <div class="centralizado">
+        <meu-botao rotulo="GRAVAR" tipo="submit"/>
+        <router-link to="/"><meu-botao rotulo="VOLTAR" tipo="button"/></router-link>
+      </div>
+
+    </form>
+  </div>
 </template>
+
 <script>
+
+import ImagemResponsiva from '../shared/imagem-responsiva/ImagemResponsiva.vue'
+
+import Botao from '../shared/botoes/Botao.vue'
+export default {
+
+  components: {
+
+    'imagem-responsiva': ImagemResponsiva, 
+    'meu-botao': Botao
+  },
+
+  data() {
+    return {
+
+      foto: {
+        titulo: '',
+        url: '', 
+        descricao: ''
+      }
+    }
+  },
+
+  methods: {
+
+    grava() {
+
+      console.log(this.foto.titulo);
+      console.log(this.foto.url);
+      console.log(this.foto.descricao);
+        this.foto = {
+          titulo: '',
+          url: '',
+          descricao: ''
+      };
+    }
+  }
+}
 
 </script>
 <style scoped>
-    .centralizado{
-        text-align: center
-    }
+
+  .centralizado {
+    text-align: center;
+  }
+  .controle {
+    font-size: 1.2em;
+    margin-bottom: 20px;
+
+  }
+  .controle label {
+    display: block;
+    font-weight: bold;
+  }
+
+ .controle label + input, .controle textarea {
+    width: 100%;
+    font-size: inherit;
+    border-radius: 5px
+  }
+
+  .centralizado {
+    text-align: center;
+  }
 
 </style>

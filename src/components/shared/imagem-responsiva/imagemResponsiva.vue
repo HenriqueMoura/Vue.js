@@ -2,7 +2,7 @@
     <img class="imagem-responsiva" :src="url" :alt="titulo">    
 </template>
 
-<script la>
+<script>
 export default{
 
     props:['url','titulo']
